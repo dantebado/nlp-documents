@@ -1,11 +1,11 @@
 package nlp.frba.utn.documents.domain;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nlp.frba.utn.documents.domain.ner.NERAnalysis;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,13 +13,17 @@ import lombok.NoArgsConstructor;
 public class Document {
 	
 	@Id
-	private ObjectId _id;
+	private String id;
 	
 	private String subject;
-	private String student_name;
+	private String studentName;
 	private int year;
-	private int quarter;
+	private String quarter;
 	private String email;
-	private String student_id;
+	private String studentId;
+	private String documentName;
+	private String documentURI;
+	
+	private NERAnalysis ner = new NERAnalysis();
 
 }
