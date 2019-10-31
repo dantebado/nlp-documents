@@ -2,10 +2,11 @@ package nlp.frba.utn.documents.services;
 
 import java.net.URI;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -23,8 +24,8 @@ public class DocumentServiceImpl implements DocumentService {
 	private DocumentRepository documentsRepository;
 
 	@Override
-	public ResponseEntity<List<Document>> getAllResponse() {
-		return ResponseEntity.ok(documentsRepository.findAll());
+	public ResponseEntity<Page<Document>> getAllResponse(Pageable pageable) {
+		return ResponseEntity.ok( documentsRepository.findAll(pageable) );
 	}
 
 	@Override

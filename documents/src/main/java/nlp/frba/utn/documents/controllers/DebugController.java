@@ -17,11 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import nlp.frba.utn.documents.domain.test.RouteTest;
-import nlp.frba.utn.documents.repositories.DocumentRepository;
-import nlp.frba.utn.documents.repositories.NERTagsRepository;
 
 @RestController
 @RequestMapping({"/debug"})
@@ -55,85 +54,131 @@ public class DebugController {
 		
 		{
 			JsonObject payload = new JsonObject();
+			
+			JsonObject student = new JsonObject();
+			student.addProperty("fullname", "Marcelo Tinelli");
+			student.addProperty("student_id", "1580849");
+			JsonArray students = new JsonArray();
+			students.add(student);
+			
 			payload.addProperty("id", id1);
 			payload.addProperty("subject", "Economia");
-			payload.addProperty("student_name", "Marcelo Tinelli");
 			payload.addProperty("year", 2017);
 			payload.addProperty("quarter", "2");
 			payload.addProperty("email", "mtinelli@eltrece.tv");
-			payload.addProperty("student_id", "1580849");
+			payload.add("students", students);
 			payload.addProperty("document_name", "tp_marce.pdf");
 			payload.addProperty("document_uri", "http://tpseconomiautn.com/documentos/tp_marce.pdf");
 			
 			perform("http://localhost:" + port + "/documents", HttpMethod.POST, payload.toString(), String.class);
+			
+			student = new JsonObject();
+			student.addProperty("fullname", "Susana Gimenez");
+			student.addProperty("student_id", "1495029");
+			students = new JsonArray();
+			students.add(student);
 
 			payload.addProperty("id", id2);
-			payload.addProperty("student_name", "Susana Gimenez");
 			payload.addProperty("email", "su@telefe.com");
-			payload.addProperty("student_id", "1495029");
+			payload.add("students", students);
 			payload.addProperty("document_name", "tp_su_final.pdf");
 			payload.addProperty("document_uri", "http://tpseconomiautn.com/documentos/tp_su_final.pdf");
 			
 			perform("http://localhost:" + port + "/documents", HttpMethod.POST, payload.toString(), String.class);
 			
+			student = new JsonObject();
+			student.addProperty("fullname", "Guido Kaczka");
+			student.addProperty("student_id", "1609875");
+			students = new JsonArray();
+			students.add(student);
+			
 			payload.addProperty("id", id3);
-			payload.addProperty("student_name", "Guido Kaczka");
 			payload.addProperty("email", "losescalones@eltrece.tv");
-			payload.addProperty("student_id", "1609875");
+			payload.add("students", students);
 			payload.addProperty("document_name", "larepe.pdf");
 			payload.addProperty("document_uri", "http://tpseconomiautn.com/documentos/larepe.pdf");
 			
 			perform("http://localhost:" + port + "/documents", HttpMethod.POST, payload.toString(), String.class);
 			
+			student = new JsonObject();
+			student.addProperty("fullname", "Moria Casan");
+			student.addProperty("student_id", "1489501");
+			students = new JsonArray();
+			students.add(student);
+			
 			payload.addProperty("id", id4);
-			payload.addProperty("student_name", "Moria Casan");
 			payload.addProperty("email", "moria@americatv.com.ar");
-			payload.addProperty("student_id", "1489501");
+			payload.add("students", students);
 			payload.addProperty("document_name", "el_tp_de_la_one.pdf");
 			payload.addProperty("document_uri", "http://tpseconomiautn.com/documentos/el_tp_de_la_one.pdf");
 			
 			perform("http://localhost:" + port + "/documents", HttpMethod.POST, payload.toString(), String.class);
 			
+			student = new JsonObject();
+			student.addProperty("fullname", "Diego Maradona");
+			student.addProperty("student_id", "1578105");
+			students = new JsonArray();
+			students.add(student);
+			
 			payload.addProperty("id", id5);
-			payload.addProperty("student_name", "Diego Maradona");
 			payload.addProperty("email", "diego_10@gimnasia.org.ar");
-			payload.addProperty("student_id", "1578105");
+			payload.add("students", students);
 			payload.addProperty("document_name", "eeeeee_final.doc");
 			payload.addProperty("document_uri", "http://tpseconomiautn.com/documentos/eeeeee_final.doc");
 			
 			perform("http://localhost:" + port + "/documents", HttpMethod.POST, payload.toString(), String.class);
 			
+			student = new JsonObject();
+			student.addProperty("fullname", "Mauricio Macri");
+			student.addProperty("student_id", "1578043");
+			students = new JsonArray();
+			students.add(student);
+			
 			payload.addProperty("id", id6);
-			payload.addProperty("student_name", "Mauricio Macri");
 			payload.addProperty("email", "mau@jxc.com.ar");
-			payload.addProperty("student_id", "1578043");
+			payload.add("students", students);
 			payload.addProperty("document_name", "tp_inundado.pdf");
 			payload.addProperty("document_uri", "http://tpseconomiautn.com/documentos/tp_inundado.pdf");
 			
 			perform("http://localhost:" + port + "/documents", HttpMethod.POST, payload.toString(), String.class);
 			
+			student = new JsonObject();
+			student.addProperty("fullname", "Alberto Fernandez");
+			student.addProperty("student_id", "1569807");
+			students = new JsonArray();
+			students.add(student);
+			
 			payload.addProperty("id", id7);
-			payload.addProperty("student_name", "Alberto Fernandez");
 			payload.addProperty("email", "alferdez@casarosada.gob.ar");
-			payload.addProperty("student_id", "1569807");
+			payload.add("students", students);
 			payload.addProperty("document_name", "tp_version_entre_todos.pdf");
 			payload.addProperty("document_uri", "http://tpseconomiautn.com/documentos/tp_version_entre_todos.pdf");
 			
 			perform("http://localhost:" + port + "/documents", HttpMethod.POST, payload.toString(), String.class);
 			
+			student = new JsonObject();
+			student.addProperty("fullname", "Horacio Rodriguez Larreta");
+			student.addProperty("student_id", "1689870");
+			students = new JsonArray();
+			students.add(student);
+			
 			payload.addProperty("id", id8);
-			payload.addProperty("student_name", "Horacio Rodriguez Larreta");
-			payload.addProperty("email", "horacio@buenosaire.gob.ar");
-			payload.addProperty("student_id", "1689870");
+			payload.addProperty("email", "horacio@buenosaires.gob.ar");
+			payload.add("students", students);
 			payload.addProperty("document_name", "hola_soy_horacio.doc");
 			payload.addProperty("document_uri", "http://tpseconomiautn.com/documentos/hola_soy_horacio.doc");
 			
 			perform("http://localhost:" + port + "/documents", HttpMethod.POST, payload.toString(), String.class);
 			
+			student = new JsonObject();
+			student.addProperty("fullname", "Lionel Messi");
+			student.addProperty("student_id", "1698078");
+			students = new JsonArray();
+			students.add(student);
+			
 			payload.addProperty("id", id9);
-			payload.addProperty("student_name", "Lionel Messi");
 			payload.addProperty("email", "lio@fcbarcelona.es");
-			payload.addProperty("student_id", "1698078");
+			payload.add("students", students);
 			payload.addProperty("document_name", "aprobamos_por_goleada.pdf");
 			payload.addProperty("document_uri", "http://tpseconomiautn.com/documentos/aprobamos_por_goleada.pdf");
 			
@@ -202,12 +247,17 @@ public class DebugController {
 		{
 			{
 				JsonObject payload = new JsonObject();
+				
+				JsonObject student = new JsonObject();
+				student.addProperty("fullname", "Marcelo Tinelli");
+				student.addProperty("student_id", "1580849");
+				JsonArray students = new JsonArray();
+				students.add(student);				
+				
 				payload.addProperty("subject", "Economia");
-				payload.addProperty("student_name", "Marcelo Tinelli");
 				payload.addProperty("year", 2017);
 				payload.addProperty("quarter", "2");
-				payload.addProperty("email", "mtinelli@eltrece.tv");
-				payload.addProperty("student_id", "1580849");
+				payload.add("students", students);
 				payload.addProperty("document_name", "tp_marce.pdf");
 				payload.addProperty("document_uri", "http://tpseconomiautn.com/documentos/tp_marce.pdf");
 				
@@ -226,10 +276,22 @@ public class DebugController {
 				list.add(performToResult(port, DocumentController.class, "/{documentId}/ner/tags/main/{tagName}", "/documents/93243B72B81365B6D28D7CFF89DFE191572469839132/ner/tags/main/inventario", HttpMethod.POST, ""));		
 			}
 			{
+				list.add(performToResult(port, DocumentController.class, "/{documentId}/ner/tags/main/{tagName}", "/documents/unknown/ner/tags/main/inventario", HttpMethod.POST, ""));		
+			}
+			{
 				list.add(performToResult(port, DocumentController.class, "/{documentId}/ner/tags/secondary/{tagName}", "/documents/93243B72B81365B6D28D7CFF89DFE191572469839132/ner/tags/secondary/inventario", HttpMethod.POST, ""));		
 			}
 			{
+				list.add(performToResult(port, DocumentController.class, "/{documentId}/ner/tags/secondary/{tagName}", "/documents/unknown/ner/tags/secondary/inventario", HttpMethod.POST, ""));		
+			}
+			{
 				list.add(performToResult(port, NerController.class, "/ner/tags", "/ner/tags", HttpMethod.GET, ""));		
+			}
+			{
+				list.add(performToResult(port, NerController.class, "/ner/tags/{tagName}", "/ner/tags/economia", HttpMethod.GET, ""));
+			}
+			{
+				list.add(performToResult(port, NerController.class, "/ner/tags/{tagName}", "/ner/tags/impuesto", HttpMethod.GET, ""));
 			}
 		}
 		

@@ -1,5 +1,7 @@
 package nlp.frba.utn.documents.domain;
 
+import java.util.Collection;
+
 import org.springframework.data.annotation.Id;
 
 import lombok.AllArgsConstructor;
@@ -15,12 +17,11 @@ public class Document {
 	@Id
 	private String id;
 	
+	Collection<Student> students;
 	private String subject;
-	private String studentName;
-	private int year;
+	private Integer year;
 	private String quarter;
 	private String email;
-	private String studentId;
 	private String documentName;
 	private String documentURI;
 	

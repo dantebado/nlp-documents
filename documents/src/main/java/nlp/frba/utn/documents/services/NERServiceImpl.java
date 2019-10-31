@@ -1,15 +1,17 @@
 package nlp.frba.utn.documents.services;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import nlp.frba.utn.documents.domain.Document;
 import nlp.frba.utn.documents.domain.ner.NERTag;
 import nlp.frba.utn.documents.exceptions.classes.DocumentNotFoundException;
+import nlp.frba.utn.documents.exceptions.classes.NERTagNotFoundException;
 import nlp.frba.utn.documents.repositories.DocumentRepository;
 import nlp.frba.utn.documents.repositories.NERTagsRepository;
 
@@ -70,8 +72,18 @@ public class NERServiceImpl implements NERService {
 	}
 
 	@Override
-	public ResponseEntity<List<NERTag>> getAllTags() {
-		return ResponseEntity.ok(nerTagsRepository.findAll());
+	public ResponseEntity<Page<NERTag>> getAllTags(Pageable pageable) {
+		return ResponseEntity.ok(nerTagsRepository.findAll(pageable));
+	}
+
+	@Override
+	public ResponseEntity<NERTag> findByName(String tagName) {
+		Optional<NERTag> tag = nerTagsRepository.findByName(tagName);
+		if(tag.isPresent()) {
+			return ResponseEntity.ok(tag.get());
+		} else {
+			throw( new NERTagNotFoundException(tagName) );
+		}
 	}
 
 }

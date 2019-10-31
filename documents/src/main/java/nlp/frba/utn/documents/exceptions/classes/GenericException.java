@@ -7,9 +7,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @AllArgsConstructor
 @Data
+@EqualsAndHashCode(callSuper=false)
 @JsonIgnoreProperties({ "suppressed", "localized_message", "stack_trace", "cause" })
 public class GenericException extends RuntimeException {
 	private static final long serialVersionUID = 369839696490698262L;
