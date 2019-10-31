@@ -10,21 +10,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import nlp.frba.utn.documents.domain.ner.NERTag;
 import nlp.frba.utn.documents.repositories.DocumentRepository;
-import nlp.frba.utn.documents.repositories.TagsRepository;
+import nlp.frba.utn.documents.repositories.NERTagsRepository;
+import nlp.frba.utn.documents.services.NERService;
 
 @RestController
 @RequestMapping({"/ner"})
 public class NerController {
 	
 	@Autowired
-	private DocumentRepository documentsRepository;
-	
-	@Autowired
-	private TagsRepository tagsRepository;
+	NERService nerService;
 
 	@GetMapping(path = {"/tags"})
-	public ResponseEntity<List<NERTag>> getDocumentById() {
-		return ResponseEntity.ok(tagsRepository.findAll());
+	public ResponseEntity<List<NERTag>> getTags() {
+		return nerService.getAllTags();
 	}
 
 }

@@ -6,6 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import nlp.frba.utn.documents.domain.ner.NERTag;
 
-public interface TagsRepository extends MongoRepository<NERTag, String> {
+public interface NERTagsRepository extends MongoRepository<NERTag, String> {
 	Optional<NERTag> findByName(String name);
 }

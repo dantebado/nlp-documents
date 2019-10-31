@@ -1,5 +1,6 @@
 package nlp.frba.utn.documents.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +19,13 @@ import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.JsonObject;
 
-import nlp.frba.utn.documents.domain.ner.NERTag;
+import nlp.frba.utn.documents.domain.test.RouteTest;
 import nlp.frba.utn.documents.repositories.DocumentRepository;
-import nlp.frba.utn.documents.repositories.TagsRepository;
+import nlp.frba.utn.documents.repositories.NERTagsRepository;
 
 @RestController
 @RequestMapping({"/debug"})
 public class DebugController {
-	
-	@Autowired
-	private DocumentRepository documentsRepository;
-	
-	@Autowired
-	private TagsRepository tagsRepository;
 	
 	@Autowired
 	private Environment env;
@@ -38,7 +33,7 @@ public class DebugController {
     @Autowired
     MongoTemplate mongoTemplate;
 
-	@GetMapping(path = {""})
+	@GetMapping(path = {"/populate"})
 	public ResponseEntity<String> getDocumentById() {
 		for (String collectionName : mongoTemplate.getCollectionNames()) {
             if (!collectionName.startsWith("system.")) {
@@ -190,6 +185,74 @@ public class DebugController {
 		}
 		
 		return ResponseEntity.ok().build();
+	}
+
+	/* *
+	 * https://www.freeformatter.com/json-escape.html
+	 * https://jsonformatter.curiousconcept.com/
+	 * */
+	
+	@GetMapping(path = {"/testRoutes"})
+	public ResponseEntity<List<RouteTest>> testRoutes() {
+		List<RouteTest> list = new ArrayList<RouteTest>();
+		
+		int port = Integer.parseInt(env.getProperty("server.port"));
+		
+		//GENERAL
+		{
+			{
+				JsonObject payload = new JsonObject();
+				payload.addProperty("subject", "Economia");
+				payload.addProperty("student_name", "Marcelo Tinelli");
+				payload.addProperty("year", 2017);
+				payload.addProperty("quarter", "2");
+				payload.addProperty("email", "mtinelli@eltrece.tv");
+				payload.addProperty("student_id", "1580849");
+				payload.addProperty("document_name", "tp_marce.pdf");
+				payload.addProperty("document_uri", "http://tpseconomiautn.com/documentos/tp_marce.pdf");
+				
+				list.add(performToResult(port, DocumentController.class, "/documents", "/documents", HttpMethod.POST, payload.toString()));
+			}
+			{				
+				list.add(performToResult(port, DocumentController.class, "/documents/{documentId}", "/documents/93243B72B81365B6D28D7CFF89DFE191572469839132", HttpMethod.GET, ""));
+			}
+			{				
+				list.add(performToResult(port, DocumentController.class, "/documents/{documentId}", "/documents/unknown", HttpMethod.GET, ""));
+			}
+		}
+		//NER
+		{
+			{
+				list.add(performToResult(port, DocumentController.class, "/{documentId}/ner/tags/main/{tagName}", "/documents/93243B72B81365B6D28D7CFF89DFE191572469839132/ner/tags/main/inventario", HttpMethod.POST, ""));		
+			}
+			{
+				list.add(performToResult(port, DocumentController.class, "/{documentId}/ner/tags/secondary/{tagName}", "/documents/93243B72B81365B6D28D7CFF89DFE191572469839132/ner/tags/secondary/inventario", HttpMethod.POST, ""));		
+			}
+			{
+				list.add(performToResult(port, NerController.class, "/ner/tags", "/ner/tags", HttpMethod.GET, ""));		
+			}
+		}
+		
+		return ResponseEntity.ok(list);
+	}
+	
+	<T> RouteTest performToResult(int port, Class<T> controller, String showuri, String uri, HttpMethod method, Object payload) throws HttpClientErrorException {
+		RouteTest result = null;
+		List<String> reqHeaders = new ArrayList<String>();
+		List<String> resHeaders = new ArrayList<String>();
+		try {
+			ResponseEntity<String> out = perform("http://localhost:" + port + uri, method, payload, String.class);					
+			for(String s : out.getHeaders().keySet()) {
+				resHeaders.add(s);
+			}
+			result = new RouteTest(method.toString(), showuri, controller.getSimpleName(), payload.toString(), reqHeaders, out.getStatusCodeValue(), resHeaders, out.getBody());
+		} catch (HttpClientErrorException e) {					
+			for(String s : e.getResponseHeaders().keySet()) {
+				resHeaders.add(s);
+			}
+			result = new RouteTest(method.toString(), showuri, controller.getSimpleName(), payload.toString(), reqHeaders, e.getRawStatusCode(), resHeaders, e.getResponseBodyAsString());
+		}		
+		return result;
 	}
 	
 	<T> ResponseEntity<T> perform(String uri, HttpMethod method, Object payload, Class<T> responseType) throws HttpClientErrorException {
