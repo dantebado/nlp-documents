@@ -29,4 +29,4 @@ En el archivo *application.properties* existen otras configuraciones adicionales
 
 ## Rutas
 
-Ver [documentación de rutas](https://docs.google.com/spreadsheets/d/1wV8ksYCYxQB613OzHznyVLednPfxOWMeif_OZbx1I4A/edit?usp=sharing "documentación de rutas") para un detalle de todas las rutas expuestas.
+Se realiza documentación automática a través de Swagger.
