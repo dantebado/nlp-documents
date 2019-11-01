@@ -73,7 +73,7 @@ public class DocumentUploadController {
 			
 			file.transferTo(transferFile);
 			
-			db = new DocumentBasis(subject, students, year, quarter, email, file.getOriginalFilename(), "%PATH_TO_FOLDER%/" + newFileName);
+			db = new DocumentBasis(subject, students, year, quarter, email, file.getOriginalFilename(), "%PATH_TO_FOLDER%" + newFileName);
 			
 			ObjectMapper objectMapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
 			String json = objectMapper.writeValueAsString(db);

@@ -50,7 +50,7 @@ public class SwaggerConfig {
 	public class StaticResourceConfiguration extends WebMvcConfigurerAdapter {
 	    @Override
 	    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-	        registry.addResourceHandler("/" + env.getProperty("store.local.external-access") + "**").addResourceLocations("file:/" + env.getProperty("store.local.absolute-path"));
+	        registry.addResourceHandler("/" + env.getProperty("store.local.external-access") + "**").addResourceLocations("file:" + env.getProperty("store.local.absolute-path"));
 	    }
 	}
 }

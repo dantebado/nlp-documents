@@ -29,7 +29,6 @@ public class Document {
 	private String quarter;
 	private String email;
 	private String documentName;
-	@JsonIgnore
 	private String documentURI;
 	
 	private NERAnalysis ner = new NERAnalysis();
@@ -38,7 +37,7 @@ public class Document {
 	@JsonProperty("document_uri")
 	public String formattedDocumentUri() {
 		Environment env = BeanUtil.getBean(Environment.class);
-		return documentURI.replace("%PATH_TO_FOLDER%", "http://" + env.getProperty("aws.publicip") + ":" + env.getProperty("server.port") + "/" +
+		return documentURI.replace("%PATH_TO_FOLDER%", env.getProperty("aws.public-address") + ":" + env.getProperty("server.port") + "/" +
 															env.getProperty("store.local.external-access") + env.getProperty("store.local.documents-relative-path"));
 	}
 
