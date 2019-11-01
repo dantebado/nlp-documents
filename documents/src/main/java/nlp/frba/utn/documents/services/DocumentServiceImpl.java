@@ -108,8 +108,10 @@ public class DocumentServiceImpl implements DocumentService {
 		try {
 			file.transferTo(transferFile);
 		} catch (IllegalStateException e) {
+			System.out.println(e.getMessage());
 			throw( new UnknownErrorException() );
 		} catch (IOException e) {
+			System.out.println(e.getMessage());
 			throw( new UnknownErrorException() );
 		}
 		
@@ -132,6 +134,7 @@ public class DocumentServiceImpl implements DocumentService {
 					HttpMethod.POST, entity, String.class);
 			return ResponseEntity.status(out.getStatusCode()).headers(headers).body(out.getBody());
 		} catch (RestClientException e) {
+			System.out.println(e.getMessage());
 			throw( new UnknownErrorException() );
 		}			
 		
