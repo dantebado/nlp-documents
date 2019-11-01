@@ -67,7 +67,9 @@ public class DocumentUploadController {
 			    extension = file.getOriginalFilename().substring(i+1);
 			}
 			final String newFileName = UUID.randomUUID().toString() + "." + extension;
-			final File transferFile = new File(realPath + "/" + newFileName);
+			final File transferFile = new File(realPath + newFileName);
+			
+			System.out.println("New File " + realPath + newFileName);
 			
 			file.transferTo(transferFile);
 			
@@ -84,7 +86,8 @@ public class DocumentUploadController {
 		    											HttpMethod.POST, entity, String.class);
 			
 		} catch (Exception e) {
-			e.printStackTrace();		
+			//e.printStackTrace();
+			System.out.println(e.getMessage());
 			return ResponseEntity.badRequest().build();
 		}
 		
