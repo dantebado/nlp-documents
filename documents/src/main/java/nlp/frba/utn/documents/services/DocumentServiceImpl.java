@@ -128,7 +128,7 @@ public class DocumentServiceImpl implements DocumentService {
 	    headers.setContentType(MediaType.APPLICATION_JSON);
 	    HttpEntity<Object> entity = new HttpEntity<Object>(json, headers);
 	    try {
-		    ResponseEntity<String> out = restTemplate.exchange(env.getProperty("aws.public-address") + "s:" + env.getProperty("server.port") + "/documents",
+		    ResponseEntity<String> out = restTemplate.exchange(env.getProperty("aws.public-address") + ":" + env.getProperty("server.port") + "/documents",
 					HttpMethod.POST, entity, String.class);
 			return ResponseEntity.status(out.getStatusCode()).headers(headers).body(out.getBody());
 		} catch (RestClientException e) {
