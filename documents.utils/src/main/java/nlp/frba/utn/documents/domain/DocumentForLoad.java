@@ -1,4 +1,4 @@
-package nlp.frba.utn.documents.utils.domain;
+package nlp.frba.utn.documents.domain;
 
 import java.util.Collection;
 

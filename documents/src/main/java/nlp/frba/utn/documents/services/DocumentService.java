@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import nlp.frba.utn.documents.domain.Document;
-import nlp.frba.utn.documents.domain.DocumentBasis;
 
 public interface DocumentService {
 	

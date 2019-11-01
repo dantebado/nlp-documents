@@ -1,7 +1,6 @@
-package nlp.frba.utn.documents.utils;
+package nlp.frba.utn.documents.actions;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -10,20 +9,23 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 
-import nlp.frba.utn.documents.utils.domain.DocumentForLoad;
-import nlp.frba.utn.documents.utils.domain.Student;
+import nlp.frba.utn.documents.domain.DocumentForLoad;
+import nlp.frba.utn.documents.domain.Student;
+import nlp.frba.utn.documents.utils.FileUtils;
+import nlp.frba.utn.documents.utils.GeneralUtils;
+import nlp.frba.utn.documents.utils.GsonUtils;
 
 public class DocumentLoader {
 	
 	public static void loadDocuments() {
 		int records = 0;
 		
+		System.out.println("[STARTED]");
 		Reader reader;
 		try {
 			reader = Files.newBufferedReader(FileUtils.getInstance().getFilePath("data.csv"));
@@ -36,29 +38,29 @@ public class DocumentLoader {
             	String names_s = nextRecord[2];
             	String ids_s = nextRecord[1];
             	for(int i = 0 ; i < names_s.split(";").length ; i++) {
-            		if(FileUtils.getValueOrNull(names_s.split(";")[i]) != null) {
+            		if(GeneralUtils.getValueOrNull(names_s.split(";")[i]) != null) {
                 		String id = "";
                 		try {
                     		id = ids_s.split(";")[i];						
     					} catch (Exception e) {
     					}
-                		students.add(new Student(FileUtils.getValueOrNull(names_s.split(";")[i]), FileUtils.getValueOrNull(id)));
+                		students.add(new Student(GeneralUtils.getValueOrNull(names_s.split(";")[i]), GeneralUtils.getValueOrNull(id)));
             		}
             	}
             	
             	DocumentForLoad d = new DocumentForLoad(
-            			FileUtils.getValueOrNull(nextRecord[0]),
+            			GeneralUtils.getValueOrNull(nextRecord[0]),
             			students,
-            			FileUtils.getValueOrNull(nextRecord[3]) == null ? null : Integer.parseInt(nextRecord[3]),
-            			FileUtils.getValueOrNull(nextRecord[4]),
-                    	FileUtils.getValueOrNull(nextRecord[5]),
-                    	FileUtils.getValueOrNull(nextRecord[6]),
-                    	FileUtils.getValueOrNull(nextRecord[7])
+            			GeneralUtils.getValueOrNull(nextRecord[3]) == null ? null : Integer.parseInt(nextRecord[3]),
+            			GeneralUtils.getValueOrNull(nextRecord[4]),
+            			GeneralUtils.getValueOrNull(nextRecord[5]),
+            			GeneralUtils.getValueOrNull(nextRecord[6]),
+            			GeneralUtils.getValueOrNull(nextRecord[7])
             		);
             	
             	String json = GsonUtils.getGson().toJson(d).toString();
             	
-            	URL url = new URL("http://18.231.174.90:8081/documents");
+            	URL url = new URL("http://localhost:6570/documents");
     	        HttpURLConnection con = (HttpURLConnection) url.openConnection();
     	        con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
     	        con.setRequestMethod("POST");
@@ -89,32 +91,17 @@ public class DocumentLoader {
     	        }
             }
             
+            if(records % 10 != 0) {
+	        	System.out.println("[" + records + "]");
+            }
+        	System.out.println("[FINISHED]");
+            
             csvReader.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (CsvValidationException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public static String renameFile(String filename) {
-		String folder = "E:\\Mis Documentos\\Documentos\\2019\\NLP\\dataset-nlp-utn";
-		String extension = "";
-		int i = filename.lastIndexOf('.');
-		if (i > 0) {
-		    extension = filename.substring(i+1);
-		}
-		
-		String newFileName = UUID.randomUUID().toString() + "." + extension;
-		
-		try {
-			File source = new File(folder + "/" + filename);
-			Files.copy( source.toPath(), source.toPath().resolveSibling(folder + "/renamed/" + newFileName));
-			return newFileName;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 }
