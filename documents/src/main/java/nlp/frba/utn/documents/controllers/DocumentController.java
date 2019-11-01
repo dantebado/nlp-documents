@@ -40,9 +40,11 @@ public class DocumentController {
 	 * 
 	 * 
 	 * */
-	
+
+	@ApiOperation(value = "Create Document", notes = "Creating a Document")	
 	@PostMapping
-	public ResponseEntity<Document> createDocument(@Valid @RequestBody Document document){
+	public ResponseEntity<Document> createDocument(
+			@Valid @RequestBody Document document){
 		return documentService.createNew(document);
 	}
 
