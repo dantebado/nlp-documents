@@ -66,7 +66,7 @@ public class DocumentServiceImpl implements DocumentService {
 			try {
 				document.setId( MD5Util.getMD5(document.getDocumentName()) + System.currentTimeMillis() );
 			} catch (NoSuchAlgorithmException e) {
-				throw( new UnknownErrorException() );
+				throw( new UnknownErrorException(e.getMessage()) );
 			}
 		}
 		
@@ -108,11 +108,9 @@ public class DocumentServiceImpl implements DocumentService {
 		try {
 			file.transferTo(transferFile);
 		} catch (IllegalStateException e) {
-			System.out.println(e.getMessage());
-			throw( new UnknownErrorException() );
+			throw( new UnknownErrorException(e.getMessage()) );
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
-			throw( new UnknownErrorException() );
+			throw( new UnknownErrorException(e.getMessage()) );
 		}
 		
 		db = new DocumentBasis(subject, students, year, quarter, email, file.getOriginalFilename(), "%PATH_TO_FOLDER%" + newFileName);
@@ -122,7 +120,7 @@ public class DocumentServiceImpl implements DocumentService {
 		try {
 			json = objectMapper.writeValueAsString(db);
 		} catch (JsonProcessingException e) {
-			throw( new UnknownErrorException() );
+			throw( new UnknownErrorException(e.getMessage()) );
 		}
 		
 		RestTemplate restTemplate = new RestTemplate();
@@ -134,8 +132,7 @@ public class DocumentServiceImpl implements DocumentService {
 					HttpMethod.POST, entity, String.class);
 			return ResponseEntity.status(out.getStatusCode()).headers(headers).body(out.getBody());
 		} catch (RestClientException e) {
-			System.out.println(e.getMessage());
-			throw( new UnknownErrorException() );
+			throw( new UnknownErrorException(e.getMessage()) );
 		}			
 		
 	}

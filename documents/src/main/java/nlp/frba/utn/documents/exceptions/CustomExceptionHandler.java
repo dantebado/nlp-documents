@@ -12,14 +12,15 @@ import nlp.frba.utn.documents.exceptions.classes.UnknownErrorException;
 @ControllerAdvice
 public class CustomExceptionHandler {
 	
+	@ExceptionHandler(value = UnknownErrorException.class)
+	public ResponseEntity<Object> exception(UnknownErrorException exception) {
+		System.out.println("[Exception]["+exception.getExceptionId()+"]["+exception.getMessage()+"]");
+		return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
+	}
+	
 	@ExceptionHandler(value = DocumentNotFoundException.class)
 	public ResponseEntity<Object> exception(DocumentNotFoundException exception) {
 		return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
-	}
-	
-	@ExceptionHandler(value = UnknownErrorException.class)
-	public ResponseEntity<Object> exception(UnknownErrorException exception) {
-		return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(value = NERTagNotFoundException.class)
