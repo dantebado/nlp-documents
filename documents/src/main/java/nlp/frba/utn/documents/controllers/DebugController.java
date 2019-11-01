@@ -12,8 +12,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,8 +20,8 @@ import com.google.gson.JsonObject;
 
 import nlp.frba.utn.documents.domain.test.RouteTest;
 
-@RestController
-@RequestMapping({"/debug"})
+/*@RestController
+@RequestMapping({"/debug"})*/
 public class DebugController {
 	
 	@Autowired
@@ -33,7 +31,7 @@ public class DebugController {
     MongoTemplate mongoTemplate;
 
 	@GetMapping(path = {"/populate"})
-	public ResponseEntity<String> getDocumentById() {
+	public ResponseEntity<String> clearDatabaseAndPopulateSample() {
 		for (String collectionName : mongoTemplate.getCollectionNames()) {
             if (!collectionName.startsWith("system.")) {
                 mongoTemplate.getCollection(collectionName).drop();
@@ -238,7 +236,7 @@ public class DebugController {
 	 * */
 	
 	@GetMapping(path = {"/testRoutes"})
-	public ResponseEntity<List<RouteTest>> testRoutes() {
+	public ResponseEntity<List<RouteTest>> testRoutesAndGetResponses() {
 		List<RouteTest> list = new ArrayList<RouteTest>();
 		
 		int port = Integer.parseInt(env.getProperty("server.port"));

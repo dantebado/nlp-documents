@@ -25,7 +25,7 @@ El proyecto incluye la dependencia lombok para la automatización de código. Pa
 
 En el archivo *application.properties* existen otras configuraciones adicionales:
 
-- **Puerto de escucha de API:** 8081
+- **Puerto de escucha de API:** 6570
 
 ## Rutas
 
