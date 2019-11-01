@@ -11,21 +11,22 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class StaticPathConfig {
-	
+
 	@Autowired
 	Environment env;
-	
+
 	@Configuration
 	public class StaticResourceConfiguration implements WebMvcConfigurer {
-	    @Override
-	    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-	        registry.addResourceHandler("/" + env.getProperty("store.local.external-access") + "**").addResourceLocations("file:" + env.getProperty("store.local.absolute-path"));
-	    }
+		@Override
+		public void addResourceHandlers(ResourceHandlerRegistry registry) {
+			registry.addResourceHandler("/" + env.getProperty("store.local.external-access") + "**")
+					.addResourceLocations("file:" + env.getProperty("store.local.absolute-path"));
+		}
 	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-	    return new BCryptPasswordEncoder();
+		return new BCryptPasswordEncoder();
 	}
-	
+
 }

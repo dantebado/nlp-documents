@@ -3,6 +3,7 @@ package nlp.frba.utn.documents.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +19,7 @@ import nlp.frba.utn.documents.services.NERService;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
-@RequestMapping({"/ner"})
+@RequestMapping(value = "/ner", produces = MediaType.APPLICATION_JSON_VALUE)
 public class NerController {
 	
 	@Autowired

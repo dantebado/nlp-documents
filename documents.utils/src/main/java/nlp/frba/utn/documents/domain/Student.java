@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class Student {
 	
 	String fullname;
-	String studentId;
+	String student_id;
 
 }
