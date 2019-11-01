@@ -37,7 +37,7 @@ public class DocumentUploadController {
 
 	@RequestMapping(value = "/processNewDocument", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<DocumentBasis> uploadDocument(
+	public ResponseEntity<String> uploadDocument(
 			@RequestParam("file") MultipartFile file,
 			@RequestParam("students_names") String _names,
 			@RequestParam("students_ids") String _ids,
@@ -69,8 +69,6 @@ public class DocumentUploadController {
 			final String newFileName = UUID.randomUUID().toString() + "." + extension;
 			final File transferFile = new File(realPath + newFileName);
 			
-			System.out.println("New File " + realPath + newFileName);
-			
 			file.transferTo(transferFile);
 			
 			db = new DocumentBasis(subject, students, year, quarter, email, file.getOriginalFilename(), "%PATH_TO_FOLDER%" + newFileName);
@@ -85,13 +83,11 @@ public class DocumentUploadController {
 		    ResponseEntity<String> out = restTemplate.exchange("http://localhost:" + env.getProperty("server.port") + "/documents",
 		    											HttpMethod.POST, entity, String.class);
 			
+			return ResponseEntity.status(out.getStatusCode()).body(out.getBody());			
 		} catch (Exception e) {
-			//e.printStackTrace();
 			System.out.println(e.getMessage());
 			return ResponseEntity.badRequest().build();
 		}
-		
-		return ResponseEntity.status(201).body(db);
 	}
 
 }
