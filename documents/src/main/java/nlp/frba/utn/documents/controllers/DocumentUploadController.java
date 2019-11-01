@@ -7,16 +7,27 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 
 import nlp.frba.utn.documents.domain.DocumentBasis;
 import nlp.frba.utn.documents.domain.Student;
+import nlp.frba.utn.documents.domain.test.RouteTest;
+import nlp.frba.utn.documents.utils.JSONUtil;
 
 @Controller
 public class DocumentUploadController {
@@ -24,7 +35,7 @@ public class DocumentUploadController {
 	@Autowired
 	Environment env; 
 
-	@RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
+	@RequestMapping(value = "/processNewDocument", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<DocumentBasis> uploadDocument(
 			@RequestParam("file") MultipartFile file,
@@ -48,8 +59,8 @@ public class DocumentUploadController {
 		}
 
 		try {
-			final String uploadDir = "/documents/";
-			final String realPath = env.getProperty("store.local.absolutepath") + uploadDir;
+			final String uploadDir = env.getProperty("store.local.documents-relative-path");
+			final String realPath = env.getProperty("store.local.absolute-path") + uploadDir;
 			String extension = "";
 			int i = file.getOriginalFilename().lastIndexOf('.');
 			if (i > 0) {
@@ -61,7 +72,18 @@ public class DocumentUploadController {
 			file.transferTo(transferFile);
 			
 			db = new DocumentBasis(subject, students, year, quarter, email, file.getOriginalFilename(), "%PATH_TO_FOLDER%/" + newFileName);
-		} catch (Exception e) {		
+			
+			ObjectMapper objectMapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+			String json = objectMapper.writeValueAsString(db);
+			
+			RestTemplate restTemplate = new RestTemplate();
+		    HttpHeaders headers = new HttpHeaders();
+		    headers.setContentType(MediaType.APPLICATION_JSON);
+		    HttpEntity<Object> entity = new HttpEntity<Object>(json, headers);
+		    ResponseEntity<String> out = restTemplate.exchange("http://localhost:" + env.getProperty("server.port") + "/documents",
+		    											HttpMethod.POST, entity, String.class);
+			
+		} catch (Exception e) {
 			e.printStackTrace();		
 			return ResponseEntity.badRequest().build();
 		}

@@ -41,8 +41,8 @@ public class RouteTest {
 		this.resBody = getAsShowableJson(resBody, "res");
 	}
 	
-	private static Gson gson = null;
-	private static Gson getGson() {
+	public static Gson gson = null;
+	public static Gson getGson() {
 		if(gson == null) {
 			gson = new GsonBuilder().setPrettyPrinting().create();
 		}
