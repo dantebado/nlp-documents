@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -44,13 +42,5 @@ public class SwaggerConfig {
 	      null,
 	      null,
 	      Collections.emptyList());
-	}
-	
-	@Configuration
-	public class StaticResourceConfiguration extends WebMvcConfigurerAdapter {
-	    @Override
-	    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-	        registry.addResourceHandler("/" + env.getProperty("store.local.external-access") + "**").addResourceLocations("file:" + env.getProperty("store.local.absolute-path"));
-	    }
 	}
 }

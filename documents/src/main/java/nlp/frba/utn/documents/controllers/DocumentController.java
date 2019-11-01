@@ -1,23 +1,43 @@
 package nlp.frba.utn.documents.controllers;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import nlp.frba.utn.documents.domain.Document;
+import nlp.frba.utn.documents.domain.DocumentBasis;
+import nlp.frba.utn.documents.domain.Student;
 import nlp.frba.utn.documents.services.DocumentService;
 import nlp.frba.utn.documents.services.NERService;
 import springfox.documentation.annotations.ApiIgnore;
@@ -32,6 +52,9 @@ public class DocumentController {
 	@Autowired
 	NERService nerService;
 	
+	@Autowired
+	Environment env; 
+	
 	/*
 	 * 
 	 * 
@@ -41,7 +64,28 @@ public class DocumentController {
 	 * 
 	 * */
 
-	@ApiOperation(value = "Create Document", notes = "Creating a Document")	
+	@ApiOperation(value = "Form Document Process", notes = "Processing Document creation form from front")	
+	@RequestMapping(value = "/form", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<String> uploadDocument(
+			@ApiParam(required = true, value = "File to upload")
+			@RequestParam("file") MultipartFile file,
+			@ApiParam(required = true, value = "Student Names separated by #", example = "Diego Maradona#Carlos Bianchi")
+			@RequestParam("students_names") String _names,
+			@ApiParam(required = true, value = "Student IDs separated by #", example = "1578489#1625887")
+			@RequestParam("students_ids") String _ids,
+			@ApiParam(required = true, value = "File Subject", example = "Economía")
+			@RequestParam("subject") String subject,
+			@ApiParam(required = true, value = "School Year", example = "2017")
+			@RequestParam("year") Integer year,
+			@ApiParam(required = true, value = "Quarter (1|2|A)", example = "A")
+			@RequestParam("quarter") String quarter,
+			@ApiParam(required = true, value = "Email to send analysis results", example = "example@est.frba.utn.edu.ar")
+			@RequestParam("email") String email ){
+		return documentService.processForm(file, _names, _ids, subject, year, quarter, email);
+	}
+
+	@ApiOperation(value = "Create Document", notes = "Creating a Document")
 	@PostMapping
 	public ResponseEntity<Document> createDocument(
 			@Valid @RequestBody Document document){
