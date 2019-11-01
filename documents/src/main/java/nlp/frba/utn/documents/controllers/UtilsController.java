@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 @RestController
 @RequestMapping({"/utils"})
 public class UtilsController {
@@ -23,9 +26,12 @@ public class UtilsController {
 	
 	@Autowired
 	Environment env;
-	
+
+	@ApiOperation(value = "Clean Database", notes = "Cleaning all records from Document database")
 	@GetMapping(path = {"/clean"})
-	public ResponseEntity<String> clearDatabaseAndPopulateSample(@RequestParam String auth) {
+	public ResponseEntity<String> clearDatabaseAndPopulateSample(
+			@ApiParam(required = true, value = "Access password", example="password")
+			@RequestParam String auth) {
 		if(passwordEncoder.matches(auth, env.getProperty("local.security.auth"))) {
 			for (String collectionName : mongoTemplate.getCollectionNames()) {
 	            if (!collectionName.startsWith("system.")) {
