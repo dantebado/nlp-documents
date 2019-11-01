@@ -4,7 +4,8 @@
 	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
 	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
 	
-	<springProperty scope="context" name="LOGS" source="store.local.absolute-path" />
+	<springProperty scope="context" name="store.local.absolute-path" source="store.local.absolute-path" />
+	<springProperty scope="context" name="spring.profiles.active" source="spring.profiles.active" />
 	
 	<appender name="Console"
 		class="ch.qos.logback.core.ConsoleAppender">
@@ -17,7 +18,7 @@
  
 	<appender name="RollingFile"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOGS}/spring-boot-logger.log</file>
+		<file>${store.local.absolute-path}logs//spring-boot-logger.log</file>
 		<encoder
 			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
@@ -26,7 +27,7 @@
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- rollover daily and when the file reaches 10 MegaBytes -->
-			<fileNamePattern>${LOGS}/archived/spring-boot-logger-%d{yyyy-MM-dd}.%i.log
+			<fileNamePattern>${store.local.absolute-path}logs/archived/spring-boot-logger-%d{yyyy-MM-dd}.%i.log
 			</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy
 				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -34,9 +35,7 @@
 			</timeBasedFileNamingAndTriggeringPolicy>
 		</rollingPolicy>
 	</appender>
-
-	<root level="INFO">
-		<appender-ref ref="Console" />
-	</root>
+	
+	<include resource="logback-${spring.profiles.active}.xml"/>
 	
 </configuration>
