@@ -6,6 +6,7 @@ import java.util.Collections;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,11 +22,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import nlp.frba.utn.documents.domain.security.Role;
 import nlp.frba.utn.documents.domain.security.Role.RoleName;
-import nlp.frba.utn.documents.domain.security.SignUpRequest;
 import nlp.frba.utn.documents.domain.security.User;
 import nlp.frba.utn.documents.exceptions.classes.UnknownErrorException;
 import nlp.frba.utn.documents.payload.JwtAuthenticationResponse;
 import nlp.frba.utn.documents.payload.LoginRequest;
+import nlp.frba.utn.documents.payload.SignUpRequest;
 import nlp.frba.utn.documents.repositories.RoleRepository;
 import nlp.frba.utn.documents.repositories.UserRepository;
 import nlp.frba.utn.documents.security.JwtTokenProvider;
@@ -49,6 +50,9 @@ public class AuthController {
     @Autowired
     JwtTokenProvider tokenProvider;
 
+    @Value("${app.signup-allowed}")
+    private boolean signupAllowed;
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -67,6 +71,9 @@ public class AuthController {
     
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+    	if(!signupAllowed) {
+    		throw new UnknownErrorException("Signup is closed for the moment");
+    	}
         if(userRepository.existsByUsername(signUpRequest.getUsername())) {
             return new ResponseEntity("Username Already Taken",
                     HttpStatus.BAD_REQUEST);

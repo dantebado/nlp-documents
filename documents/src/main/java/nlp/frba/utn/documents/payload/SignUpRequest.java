@@ -1,4 +1,4 @@
-package nlp.frba.utn.documents.domain.security;
+package nlp.frba.utn.documents.payload;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
