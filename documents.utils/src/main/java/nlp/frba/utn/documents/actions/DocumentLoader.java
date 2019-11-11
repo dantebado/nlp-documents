@@ -60,7 +60,7 @@ public class DocumentLoader {
             	
             	String json = GsonUtils.getGson().toJson(d).toString();
             	
-            	URL url = new URL("http://18.231.174.90:6570/documents");
+            	URL url = new URL("http://18.231.15.217:6570/documents");
     	        HttpURLConnection con = (HttpURLConnection) url.openConnection();
     	        con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
     	        con.setRequestMethod("POST");
