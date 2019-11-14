@@ -4,6 +4,15 @@ Este proyecto administra los pasos iniciales de los documentos cargados al detec
 
 # Setup
 
+Registrar usuario:  
+{
+	"name" : "Admin",
+	"username" : "userAdmin",
+	"email" : "nlputn@gmail.com",
+	"password" : "utn.frba.nlp"
+}
+
+
 ### MongoDB
 
 Para la capa de persistencia se utiliza MongoDB. Existe un archivo de configuración *application.properties* dentro de la carpeta Resources para editar los detalles de conexión. Los valores por defecto son:

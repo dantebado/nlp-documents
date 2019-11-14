@@ -85,6 +85,14 @@ public class DocumentController {
 			@PathVariable String documentId) {
 		return documentService.findByIdResponse(documentId);
 	}
+
+	@ApiOperation(value = "Document Content by ID", notes = "Finding a Document by its ID and Retrieving its Contents")
+	@GetMapping(path = {"/{documentId}/contents"})
+	public ResponseEntity<String> fetchDocumentContents(
+			@ApiParam(required = true, value = "Document ID", example = "086D034BF1D2AA5653B9C9B6122C31572570858104")
+			@PathVariable String documentId) {
+		return documentService.fetchDocumentContents(documentId);
+	}
 	
 	@ApiOperation(value = "Documents", notes = "Retrieving collection of all Documents")
 	@ApiImplicitParams({

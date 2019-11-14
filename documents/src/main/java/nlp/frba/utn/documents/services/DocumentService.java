@@ -14,5 +14,6 @@ public interface DocumentService {
 	public ResponseEntity<Document> createNew(Document document);
 	public ResponseEntity<String> processForm(MultipartFile file, String _names,
 			String _ids, String subject, Integer year, String quarter, String email);
+	public ResponseEntity<String> fetchDocumentContents(String documentId);
 
 }
