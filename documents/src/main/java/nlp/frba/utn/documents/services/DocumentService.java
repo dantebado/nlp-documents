@@ -15,5 +15,6 @@ public interface DocumentService {
 	public ResponseEntity<String> processForm(MultipartFile file, String _names,
 			String _ids, String subject, Integer year, String quarter, String email);
 	public ResponseEntity<String> fetchDocumentContents(String documentId);
+	ResponseEntity<String> fetchDocumentKeywords(String documentId);
 
 }

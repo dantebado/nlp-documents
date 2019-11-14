@@ -141,10 +141,21 @@ public class DocumentServiceImpl implements DocumentService {
 	public ResponseEntity<String> fetchDocumentContents(String documentId) {
 		RestTemplate restTemplate = new RestTemplate();
 		try {
-			System.out.println(env.getProperty("servicecontents.host") + ":" +
-					env.getProperty("servicecontents.port") + "/documents/" + documentId + "/contents");
 			ResponseEntity<String> out = restTemplate.exchange(env.getProperty("servicecontents.host") + ":" +
 					env.getProperty("servicecontents.port") + "/documents/" + documentId + "/contents",
+					HttpMethod.GET, null, String.class);
+			return out;
+		} catch (Exception e) {
+			throw( new UnknownErrorException(e.getMessage()) );
+		}
+	}
+
+	@Override
+	public ResponseEntity<String> fetchDocumentKeywords(String documentId) {
+		RestTemplate restTemplate = new RestTemplate();
+		try {
+			ResponseEntity<String> out = restTemplate.exchange(env.getProperty("servicecontents.host") + ":" +
+					env.getProperty("servicecontents.port") + "/documents/" + documentId + "/keywords",
 					HttpMethod.GET, null, String.class);
 			return out;
 		} catch (Exception e) {

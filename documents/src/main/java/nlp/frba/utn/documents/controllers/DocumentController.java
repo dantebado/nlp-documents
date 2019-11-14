@@ -93,6 +93,14 @@ public class DocumentController {
 			@PathVariable String documentId) {
 		return documentService.fetchDocumentContents(documentId);
 	}
+
+	@ApiOperation(value = "Document Keywords by ID", notes = "Finding a Document by its ID and Retrieving its Keywords")
+	@GetMapping(path = {"/{documentId}/keywords"})
+	public ResponseEntity<String> fetchDocumentKeywords(
+			@ApiParam(required = true, value = "Document ID", example = "086D034BF1D2AA5653B9C9B6122C31572570858104")
+			@PathVariable String documentId) {
+		return documentService.fetchDocumentKeywords(documentId);
+	}
 	
 	@ApiOperation(value = "Documents", notes = "Retrieving collection of all Documents")
 	@ApiImplicitParams({
